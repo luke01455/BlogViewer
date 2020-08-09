@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import BlogCard from '../blog-card/blog-card.component'
 import './homepage.styles.scss';
 
 const HomePage = () => {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [posts, setPosts] = useState([]);
-
-  // Note: the empty deps array [] means
-  // this useEffect will run once
-  // similar to componentDidMount()
+    
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/posts")
     .then(response => response.json())
@@ -16,10 +14,8 @@ const HomePage = () => {
         (result) => {
           setIsLoaded(true);
           setPosts(result)
+          console.log(result)
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
           setIsLoaded(true);
           setError(error);
@@ -33,13 +29,11 @@ const HomePage = () => {
     return <div>Loading...</div>;
   } else {
     return (
-      <ul>
+      <div>
         {posts.map(post => (
-          <li key={post.id}>
-            {post.title} {post.body}
-          </li>
+          <BlogCard key={post.id} userId={post.userId} body={post.body} title={post.title}/>
         ))}
-      </ul>
+      </div>
     );
   }
 }
